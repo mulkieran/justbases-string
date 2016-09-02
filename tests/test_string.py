@@ -167,6 +167,18 @@ class TestString(unittest.TestCase):
     Test operation of String class.
     """
 
+    def testExceptions(self):
+        """
+        Verify that exceptions are properly thrown.
+        """
+        xformer = String(DisplayConfig(), 2)
+        with self.assertRaises(BaseDisplayError):
+            xformer.xform(-1, [0, 2], [], [], 0)
+        with self.assertRaises(BaseDisplayError):
+            xformer.xform(-1, [], [0, 2], [], 0)
+        with self.assertRaises(BaseDisplayError):
+            xformer.xform(-1, [], [], [0, 2], 0)
+
     @given(
        build_sign(),
        build_base(Digits.MAX_SIZE_BASE_FOR_CHARS),

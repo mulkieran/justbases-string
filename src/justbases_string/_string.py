@@ -209,6 +209,7 @@ class String(object):
         self.NUMBER = Number(display.base_config, base)
         self.STRIP = Strip(display.strip_config, base)
 
+        self.base = base
         self.CONFIG = display
 
     def xform(
@@ -236,6 +237,27 @@ class String(object):
         :raises BaseDisplayValueError:
         """
         # pylint: disable=too-many-arguments
+        if any(x < 0 or x >= self.base for x in integer_part):
+            raise BaseDisplayValueError(
+               integer_part,
+               "integer_part",
+               "must have all elements non-negative and less than base"
+            )
+
+        if any(x < 0 or x >= self.base for x in non_repeating_part):
+            raise BaseDisplayValueError(
+               non_repeating_part,
+               "non_repeating_part",
+               "must have all elements non-negative and less than base"
+            )
+
+        if any(x < 0 or x >= self.base for x in repeating_part):
+            raise BaseDisplayValueError(
+               repeating_part,
+               "repeating_part",
+               "must have all elements non-negative and less than base"
+            )
+
         if repeating_part == []:
             non_repeating_part = self.STRIP.xform(non_repeating_part, relation)
 
